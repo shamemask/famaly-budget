@@ -15,8 +15,87 @@ ruff = "^0.11.6"
 go-task-bin = "^3.43.2"
 isort = "^6.0.1"
 drf-yasg = "^1.21.10"
+pdfplumber = "^0.11.6"
+pytest-mock = "^3.14.0"
+tabula-py = "^2.10.0"
+camelot-py = {extras = ["cv"], version = "^1.0.0"}
+pytesseract = "^0.3.13"
+pillow = "^11.2.1"
+pdf2image = "^1.17.0"
+python-dotenv = "^1.1.0"
+fitz = "^0.0.1.dev2"
+pymupdf = "^1.25.5"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+lint.select = ["ALL"]
+lint.ignore = [
+    "D100",  # Missing docstring in public module
+    "D101",  # Missing docstring in public class
+    "D102",  # Missing docstring in public method
+    "D103",  # Missing docstring in public function
+    "D104",  # Missing docstring in public package
+    "D105",  # Missing docstring in magic method
+    "D106",  # Missing docstring in public nested class
+    "D107",  # Missing docstring in `__init__`
+    "D202",  # No blank lines allowed after function docstring (found 1)
+    "D203",  # "one-blank-line-before-class"
+    "D212",  # "multi-line-summary-first-line"
+    "RUF001",  # String contains ambiguous `я`
+    "RUF002",  # Docstring contains ambiguous `я`
+    "RUF003",  # Comment contains ambiguous `я`
+    "ANN101",  # Missing type annotation for `self` in method
+    "ANN102",  # Missing type annotation for `cls` in classmethod
+    "ANN401",  # Dynamically typed expressions (typing.Any) are disallowed
+    "PT001",  # Use `@pytest.fixture()` over `@pytest.fixture`
+    "FA102",  # Missing `from __future__ import annotations`
+    "E501",  # Line too long
+    "TD002",  # Missing author
+    "TD003",  # Missing issue link on the line following this
+    "FBT001",  # Boolean-typed positional argument in function definition
+    "FBT002",  # Boolean default positional argument in function definition
+    "ARG002",   # Unused method argument: `pk`
+    "DTZ007" # Naive datetime constructed using `datetime.datetime.strptime()` without %z
+]
+
+[tool.ruff.lint.per-file-ignores]
+"*/migrations/*.py" = [
+    "N806",  # Variable `ModelClass` in function should be lowercase
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+    "ANN001",  # Missing type annotation for function argument
+    "ANN201",  # Missing return type annotation for public function `drop_archived_instances`
+    "ARG001",  # Unused function argument: `schema_editor`
+]
+"test_*.py" = [
+    "S101",  # Use of `assert` detected
+    "ARG001",  # Unused function argument
+    "ANN201",  # Missing return type annotation for public function
+    "PLR0913",  # Too many arguments in function definition
+    "PLR2004",  # Magic value used in comparison, consider replacing 0.00108 with a constant variable
+]
+"admin.py" = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]
+"viewsets.py" = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]
+"**/viewsets/*.py" = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]
+"serializers.py" = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]
+"**/serializers/*.py" = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]
+"filtersets.py" = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]
+"**/filtersets/*.py" = [
+    "RUF012",  # Mutable class attributes should be annotated with `typing.ClassVar`
+]

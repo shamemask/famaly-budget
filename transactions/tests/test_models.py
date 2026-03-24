@@ -1,13 +1,16 @@
-from django.test import TestCase
-from unittest.mock import patch, MagicMock
-from transactions.models import Client, Product, Transaction
 from datetime import date, datetime
 from decimal import Decimal
+from unittest.mock import MagicMock, patch
+
+from django.test import TestCase
+from django.utils.timezone import make_aware
+
+from transactions.models import Client, Product, Transaction
 
 
 class ClientModelTest(TestCase):
     @patch("transactions.models.Client.objects")
-    def test_client_creation(self, mock_client_objects):
+    def test_client_creation(self, mock_client_objects: Client):
         # Создаем мок для объекта клиента
         mock_client = MagicMock()
         mock_client.full_name = "Иванова Анна Сергеевна"
@@ -26,17 +29,15 @@ class ClientModelTest(TestCase):
             full_name="Иванова Анна Сергеевна",
             address="123456, г. Новгород, ул. Солнечная, д. 10, кв. 20",
         )
-        self.assertEqual(client.full_name, "Иванова Анна Сергеевна")
-        self.assertEqual(
-            client.address, "123456, г. Новгород, ул. Солнечная, д. 10, кв. 20"
-        )
-        self.assertTrue(client.created_at)
+        assert client.full_name == "Иванова Анна Сергеевна"
+        assert client.address == "123456, г. Новгород, ул. Солнечная, д. 10, кв. 20"
+        assert client.created_at
 
 
 class ProductModelTest(TestCase):
     @patch("transactions.models.Product.objects")
     @patch("transactions.models.Client.objects")
-    def test_product_creation(self, mock_client_objects, mock_product_objects):
+    def test_product_creation(self, mock_client_objects: Client, mock_product_objects: Product):
         # Мок для клиента
         mock_client = MagicMock()
         mock_client_objects.get.return_value = mock_client
@@ -46,7 +47,7 @@ class ProductModelTest(TestCase):
         mock_product.contract_number = "1234567890"
         mock_product.contract_date = date(2021, 5, 12)
         mock_product.account_number = "Не активирован"
-        mock_product.created_at = datetime(2025, 4, 22, 10, 0)
+        mock_product.created_at = make_aware(datetime(2025, 4, 22, 10, 0))
         mock_product_objects.create.return_value = mock_product
 
         # Вызываем создание продукта
@@ -64,15 +65,19 @@ class ProductModelTest(TestCase):
             contract_number="1234567890",
             account_number="Не активирован",
         )
-        self.assertEqual(product.contract_number, "1234567890")
-        self.assertEqual(product.contract_date, date(2021, 5, 12))
-        self.assertTrue(product.created_at)
+        assert product.account_number == "1234567890"
+        assert product.account_number == date(2021, 5, 12)
+        assert product.created_at
 
 
 class TransactionModelTest(TestCase):
     @patch("transactions.models.Transaction.objects")
     @patch("transactions.models.Product.objects")
-    def test_transaction_creation(self, mock_product_objects, mock_transaction_objects):
+    def test_transaction_creation(
+        self,
+        mock_product_objects: Product,
+        mock_transaction_objects: Transaction,
+    ):
         # Мок для продукта
         mock_product = MagicMock()
         mock_product_objects.get.return_value = mock_product
@@ -82,15 +87,15 @@ class TransactionModelTest(TestCase):
         mock_transaction.amount = Decimal("-1500.00")
         mock_transaction.description = "Оплата в ИП Сидоров В.В."
         mock_transaction.card_last_four = "1234"
-        mock_transaction.operation_datetime = datetime(2025, 4, 15, 14, 30)
-        mock_transaction.created_at = datetime(2025, 4, 22, 10, 0)
+        mock_transaction.operation_datetime = make_aware(datetime(2025, 4, 15, 14, 30))
+        mock_transaction.created_at = make_aware(datetime(2025, 4, 22, 10, 0))
         mock_transaction_objects.create.return_value = mock_transaction
 
         # Вызываем создание транзакции
         transaction = Transaction.objects.create(
             product=mock_product,
-            operation_datetime=datetime(2025, 4, 15, 14, 30),
-            description_date=datetime(2025, 4, 15, 14, 31),
+            operation_datetime=make_aware(datetime(2025, 4, 15, 14, 30)),
+            description_date=make_aware(datetime(2025, 4, 15, 14, 31)),
             amount=Decimal("-1500.00"),
             description="Оплата в ИП Сидоров В.В.",
             card_last_four="1234",
@@ -99,13 +104,13 @@ class TransactionModelTest(TestCase):
         # Проверяем вызовы
         mock_transaction_objects.create.assert_called_once_with(
             product=mock_product,
-            operation_datetime=datetime(2025, 4, 15, 14, 30),
-            description_date=datetime(2025, 4, 15, 14, 31),
+            operation_datetime=make_aware(datetime(2025, 4, 15, 14, 30)),
+            description_date=make_aware(datetime(2025, 4, 15, 14, 31)),
             amount=Decimal("-1500.00"),
             description="Оплата в ИП Сидоров В.В.",
             card_last_four="1234",
         )
-        self.assertEqual(transaction.amount, Decimal("-1500.00"))
-        self.assertEqual(transaction.description, "Оплата в ИП Сидоров В.В.")
-        self.assertEqual(transaction.card_last_four, "1234")
-        self.assertTrue(transaction.created_at)
+        assert transaction.amount == Decimal("-1500.00")
+        assert transaction.description == "Оплата в ИП Сидоров В.В."
+        assert transaction.card_last_four == "1234"
+        assert transaction.created_at

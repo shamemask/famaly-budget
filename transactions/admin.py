@@ -1,16 +1,27 @@
+import logging
+
 from django.contrib import admin
-from .models import Client, Product, Transaction
-from .forms import TransactionFileUploadForm
-from django.urls import path
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from .parser import parse_transaction_data
+from django.urls import URLPattern, path
+
+from monetary_parser.strategems.parser import ParserStrategy
+
+from .forms import TransactionFileUploadForm
+from .models import Client, Product, Transaction
+
+logger = logging.getLogger(__name__)
 
 
 class TransactionAdmin(admin.ModelAdmin):
     change_list_template = "admin/transactions_upload.html"
+    list_display = [
+        field.name
+        for field in Transaction._meta.get_fields()
+        if not field.many_to_many and not field.one_to_many
+    ]
 
-    def get_urls(self):
+    def get_urls(self) -> list[URLPattern]:
         urls = super().get_urls()
         custom_urls = [
             path(
@@ -21,21 +32,28 @@ class TransactionAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
-    def upload_file(self, request):
+    def upload_file(self, request: HttpRequest) -> HttpResponse:
         if request.method == "POST":
             form = TransactionFileUploadForm(request.POST, request.FILES)
             if form.is_valid():
                 file = request.FILES["file"]
-                content = file.read().decode("utf-8")
-                parse_transaction_data(content)
-                self.message_user(request, "Файл успешно загружен и обработан.")
+                file.seek(0)
+                file_content = file.read()
+                if not file_content:
+                    logger.error("Загруженный файл пуст.")
+                    self.message_user(request, "Ошибка: Загруженный файл пуст.", level="error")
+                    return HttpResponseRedirect("../")
+
+                parser = ParserStrategy(file_content)
+                parser.start()
+                self.message_user(request, "PDF-файл успешно загружен и обработан.")
                 return HttpResponseRedirect("../")
         else:
             form = TransactionFileUploadForm()
 
         context = {
             "form": form,
-            "title": "Загрузка файла транзакций",
+            "title": "Загрузка PDF-файла транзакций",
             "app_label": self.model._meta.app_label,
             "opts": self.model._meta,
         }

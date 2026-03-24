@@ -2,6 +2,7 @@ from django.db import models
 
 
 class Client(models.Model):
+    id = models.BigAutoField(primary_key=True)
     full_name = models.CharField(max_length=255)
     address = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -11,6 +12,7 @@ class Client(models.Model):
 
 
 class Product(models.Model):
+    id = models.BigAutoField(primary_key=True)
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     contract_date = models.DateField()
     contract_number = models.CharField(max_length=50, unique=True)
@@ -22,6 +24,7 @@ class Product(models.Model):
 
 
 class Transaction(models.Model):
+    id = models.BigAutoField(primary_key=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     operation_datetime = models.DateTimeField()
     description_date = models.DateTimeField()
@@ -33,3 +36,9 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.operation_datetime} - {self.amount} {self.currency}"
+
+    class Meta:
+        unique_together = ("product", "operation_datetime", "amount", "card_last_four")
+        indexes = [
+            models.Index(fields=["product", "operation_datetime", "amount", "card_last_four"]),
+        ]
