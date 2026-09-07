@@ -24,6 +24,7 @@ pillow = "^11.2.1"
 pdf2image = "^1.17.0"
 python-dotenv = "^1.1.0"
 pymupdf = "^1.25.5"
+pydantic = "^2.13.5"
 
 
 [build-system]
