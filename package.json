@@ -13,7 +13,7 @@
     "python": ">=3.11"
   },
   "scripts": {
-    "dev": "poetry run python manage.py runserver 127.0.0.1:8000",
+    "dev": "sh scripts/dev.sh",
     "start": "poetry run python manage.py runserver 0.0.0.0:8000",
     "migrate": "poetry run python manage.py migrate",
     "makemigrations": "poetry run python manage.py makemigrations",
