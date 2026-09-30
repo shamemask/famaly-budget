@@ -1,35 +1,33 @@
-[tool.poetry]
+[project]
 name = "family-budget"
 version = "0.1.0"
 description = ""
-authors = ["Daniil <77277774+shamemask@users.noreply.github.com>"]
 readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Daniil", email = "77277774+shamemask@users.noreply.github.com" }]
+dependencies = [
+    "django>=5.2,<6",
+    "djangorestframework>=3.16.0,<4",
+    "python-decouple>=3.8,<4",
+    "pytest-django>=4.11.1,<5",
+    "ruff>=0.11.6,<1",
+    "go-task-bin>=3.43.2,<4",
+    "isort>=6.0.1,<7",
+    "drf-yasg>=1.21.10,<2",
+    "pdfplumber>=0.11.6,<1",
+    "pytest-mock>=3.14.0,<4",
+    "tabula-py>=2.10.0,<3",
+    "camelot-py[cv]>=1.0.0,<2",
+    "pytesseract>=0.3.13,<1",
+    "pillow>=11.2.1,<12",
+    "pdf2image>=1.17.0,<2",
+    "python-dotenv>=1.1.0,<2",
+    "pymupdf>=1.25.5,<2",
+    "pydantic>=2.13.5,<3",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-django = "^5.2"
-djangorestframework = "^3.16.0"
-python-decouple = "^3.8"
-pytest-django = "^4.11.1"
-ruff = "^0.11.6"
-go-task-bin = "^3.43.2"
-isort = "^6.0.1"
-drf-yasg = "^1.21.10"
-pdfplumber = "^0.11.6"
-pytest-mock = "^3.14.0"
-tabula-py = "^2.10.0"
-camelot-py = {extras = ["cv"], version = "^1.0.0"}
-pytesseract = "^0.3.13"
-pillow = "^11.2.1"
-pdf2image = "^1.17.0"
-python-dotenv = "^1.1.0"
-fitz = "^0.0.1.dev2"
-pymupdf = "^1.25.5"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+package = false
 
 [tool.ruff]
 line-length = 100

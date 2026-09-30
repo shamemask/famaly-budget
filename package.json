@@ -1,0 +1,26 @@
+{
+  "name": "family-budget",
+  "version": "0.1.0",
+  "description": "Family budget tracker built with Django and Django REST Framework",
+  "private": true,
+  "author": "Daniil <77277774+shamemask@users.noreply.github.com>",
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shamemask/famaly-budget.git"
+  },
+  "engines": {
+    "python": ">=3.11"
+  },
+  "scripts": {
+    "dev": "sh scripts/dev.sh",
+    "start": "uv run python manage.py runserver 0.0.0.0:8000",
+    "migrate": "uv run python manage.py migrate",
+    "makemigrations": "uv run python manage.py makemigrations",
+    "collectstatic": "uv run python manage.py collectstatic --noinput",
+    "test": "uv run pytest -svv",
+    "lint": "uv run ruff check .",
+    "format": "uv run ruff check --fix-only --ignore COM819 && uv run ruff format",
+    "install:python": "uv sync"
+  }
+}
