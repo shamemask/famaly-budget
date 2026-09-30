@@ -15,24 +15,24 @@ tasks:
 
   migrate:
     cmds:
-      - poetry run python manage.py migrate {{ .CLI_ARGS }}
+      - uv run python manage.py migrate {{ .CLI_ARGS }}
 
   makemigrations:
     cmds:
-      - poetry run python manage.py makemigrations {{ .CLI_ARGS }}
+      - uv run python manage.py makemigrations {{ .CLI_ARGS }}
 
   collectstatic:
     cmds:
-      - poetry run python manage.py collectstatic {{ .CLI_ARGS }}
+      - uv run python manage.py collectstatic {{ .CLI_ARGS }}
 
   test:
     cmds:
-      - poetry run pytest -svv {{ .CLI_ARGS }}
+      - uv run pytest -svv {{ .CLI_ARGS }}
 
   format:ruff:
     cmds:
-      - ruff check --fix-only --ignore COM819
-      - ruff format
+      - uv run ruff check --fix-only --ignore COM819
+      - uv run ruff format
 
   format:
     cmds:
@@ -40,7 +40,7 @@ tasks:
 
   lint:ruff:
     cmds:
-      - ruff check .
+      - uv run ruff check .
 
   lint:
     cmds:

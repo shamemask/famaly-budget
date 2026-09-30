@@ -14,13 +14,13 @@
   },
   "scripts": {
     "dev": "sh scripts/dev.sh",
-    "start": "poetry run python manage.py runserver 0.0.0.0:8000",
-    "migrate": "poetry run python manage.py migrate",
-    "makemigrations": "poetry run python manage.py makemigrations",
-    "collectstatic": "poetry run python manage.py collectstatic --noinput",
-    "test": "poetry run pytest -svv",
-    "lint": "poetry run ruff check .",
-    "format": "poetry run ruff check --fix-only --ignore COM819 && poetry run ruff format",
-    "install:python": "poetry install"
+    "start": "uv run python manage.py runserver 0.0.0.0:8000",
+    "migrate": "uv run python manage.py migrate",
+    "makemigrations": "uv run python manage.py makemigrations",
+    "collectstatic": "uv run python manage.py collectstatic --noinput",
+    "test": "uv run pytest -svv",
+    "lint": "uv run ruff check .",
+    "format": "uv run ruff check --fix-only --ignore COM819 && uv run ruff format",
+    "install:python": "uv sync"
   }
 }
